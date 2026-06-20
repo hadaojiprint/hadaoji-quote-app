@@ -21,6 +21,12 @@ MASTER_FILE = APP_DIR / "body_master.json"
 CUSTOMER_FILE = APP_DIR / "customer_master.json"
 LOGO_FILE = APP_DIR / "logo.png"
 
+COMPANY_NAME = "株式会社ハダオジ"
+BRAND_NAME = "HADAOJI PRINT"
+EMAIL = "hadaojiprint@gmail.com"
+CORPORATE_NO = "6050001053912"
+
+
 DEFAULT_BODY_MASTER = {
     "00085-CVT": {
         "name": "5.6oz ヘビーウェイトTシャツ",
@@ -155,7 +161,7 @@ def make_pdf(doc_type, quote_no, customer, subject, rows, subtotal, tax, total, 
 
     amount_label = "御見積金額（税込）" if doc_type == "見積書" else "御請求金額（税込）"
 
-    story = [Paragraph(doc_type, title), Spacer(1, 9)]
+    story = [Spacer(1, 5), Paragraph(doc_type, title), Spacer(1, 15)]
 
     logo_block = []
     if LOGO_FILE.exists():
@@ -165,7 +171,19 @@ def make_pdf(doc_type, quote_no, customer, subject, rows, subtotal, tax, total, 
             logo_block.append(logo)
         except Exception:
             pass
-    logo_block.append(p("見積番号：{}<br/><br/><font size='12'><b>株式会社ハダオジ</b></font><br/>HADAOJI PRINT<br/>hadaojiprint@gmail.com".format(quote_no), right_style))
+    logo_block.append(
+        p(
+            f"""
+            <font size='13'><b>{BRAND_NAME}</b></font><br/>
+            {COMPANY_NAME}<br/>
+            Mail：{EMAIL}<br/>
+            法人番号：{CORPORATE_NO}<br/>
+            見積番号：{quote_no}<br/>
+            発行日：{date.today().strftime('%Y/%m/%d')}
+            """,
+            right_style,
+        )
+    )
 
     header = Table(
         [[

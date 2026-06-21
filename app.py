@@ -11,26 +11,10 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import mm
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.cidfonts import UnicodeCIDFont
-from reportlab.platypus import (
-    SimpleDocTemplate,
-    Table,
-    TableStyle,
-    Paragraph,
-    Spacer,
-    Image,
-)
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image
 from reportlab.lib.styles import ParagraphStyle
 
-
-# =========================
-# App settings
-# =========================
-
-st.set_page_config(
-    page_title="HADAOJI PRINT 見積・請求",
-    page_icon="🧾",
-    layout="wide",
-)
+st.set_page_config(page_title="HADAOJI PRINT 見積・請求", page_icon="🧾", layout="wide")
 
 APP_DIR = Path(__file__).parent
 LOGO_FILE = APP_DIR / "logo.png"
@@ -50,82 +34,21 @@ BANK_INFO = {
     "name": "株式会社ハダオジ（カ）ハダオジ）",
 }
 
-
-# =========================
-# Default masters
-# =========================
-
 DEFAULT_BODY_MASTER = {
-    "00085-CVT": {
-        "name": "5.6oz ヘビーウェイトTシャツ",
-        "variants": {
-            "100〜150": {"sell": 600, "cost": 400},
-            "WM〜XL": {"sell": 660, "cost": 440},
-            "XXL〜XXXL": {"sell": 840, "cost": 560},
-            "4XL〜5XL": {"sell": 960, "cost": 640},
-        },
-    },
-    "00300-ACT": {
-        "name": "4.4oz ドライTシャツ",
-        "variants": {
-            "100〜150": {"sell": 480, "cost": 320},
-            "WM〜LL": {"sell": 516, "cost": 344},
-            "3L〜5L": {"sell": 594, "cost": 396},
-            "6L〜7L": {"sell": 810, "cost": 540},
-        },
-    },
-    "5001-01": {
-        "name": "United Athle 5.6oz Tシャツ",
-        "variants": {
-            "S〜XL ホワイト": {"sell": 756, "cost": 504},
-            "S〜XL カラー": {"sell": 816, "cost": 544},
-            "XXL ホワイト": {"sell": 948, "cost": 632},
-            "XXL カラー": {"sell": 1020, "cost": 680},
-            "XXXL ホワイト": {"sell": 1092, "cost": 728},
-            "XXXL カラー": {"sell": 1152, "cost": 768},
-        },
-    },
-    "5001-02": {
-        "name": "United Athle キッズTシャツ",
-        "variants": {
-            "90〜160 ホワイト": {"sell": 690, "cost": 460},
-            "90〜160 カラー": {"sell": 744, "cost": 496},
-        },
-    },
-    "5011-01": {
-        "name": "United Athle ロングスリーブTシャツ",
-        "variants": {
-            "S〜XL ホワイト": {"sell": 1188, "cost": 792},
-            "S〜XL カラー": {"sell": 1320, "cost": 880},
-            "XXL ホワイト": {"sell": 1392, "cost": 928},
-            "XXL カラー": {"sell": 1560, "cost": 1040},
-        },
-    },
+    "00085-CVT": {"name": "5.6oz ヘビーウェイトTシャツ", "variants": {"100〜150": {"sell": 600, "cost": 400}, "WM〜XL": {"sell": 660, "cost": 440}, "XXL〜XXXL": {"sell": 840, "cost": 560}, "4XL〜5XL": {"sell": 960, "cost": 640}}},
+    "00300-ACT": {"name": "4.4oz ドライTシャツ", "variants": {"100〜150": {"sell": 480, "cost": 320}, "WM〜LL": {"sell": 516, "cost": 344}, "3L〜5L": {"sell": 594, "cost": 396}, "6L〜7L": {"sell": 810, "cost": 540}}},
+    "5001-01": {"name": "United Athle 5.6oz Tシャツ", "variants": {"S〜XL ホワイト": {"sell": 756, "cost": 504}, "S〜XL カラー": {"sell": 816, "cost": 544}, "XXL ホワイト": {"sell": 948, "cost": 632}, "XXL カラー": {"sell": 1020, "cost": 680}, "XXXL ホワイト": {"sell": 1092, "cost": 728}, "XXXL カラー": {"sell": 1152, "cost": 768}}},
+    "5001-02": {"name": "United Athle キッズTシャツ", "variants": {"90〜160 ホワイト": {"sell": 690, "cost": 460}, "90〜160 カラー": {"sell": 744, "cost": 496}}},
+    "5011-01": {"name": "United Athle ロングスリーブTシャツ", "variants": {"S〜XL ホワイト": {"sell": 1188, "cost": 792}, "S〜XL カラー": {"sell": 1320, "cost": 880}, "XXL ホワイト": {"sell": 1392, "cost": 928}, "XXL カラー": {"sell": 1560, "cost": 1040}}},
 }
 
 DEFAULT_CUSTOMER_MASTER = {
     "自由入力": {"name": "", "person": "", "memo": ""},
-    "常総学院高等学校ラグビー部": {
-        "name": "常総学院高等学校ラグビー部 様",
-        "person": "",
-        "memo": "部活動・イベントウェア",
-    },
-    "大翔工業": {
-        "name": "大翔工業株式会社 御中",
-        "person": "",
-        "memo": "設備屋さん・作業着プリント",
-    },
-    "REI FARM": {
-        "name": "REI FARM 御中",
-        "person": "",
-        "memo": "農業・企業ロゴ",
-    },
+    "常総学院高等学校ラグビー部": {"name": "常総学院高等学校ラグビー部 様", "person": "", "memo": "部活動・イベントウェア"},
+    "大翔工業": {"name": "大翔工業株式会社 御中", "person": "", "memo": "設備屋さん・作業着プリント"},
+    "REI FARM": {"name": "REI FARM 御中", "person": "", "memo": "農業・企業ロゴ"},
 }
 
-
-# =========================
-# Utility
-# =========================
 
 def load_json(path: Path, default: dict) -> dict:
     if path.exists():
@@ -164,11 +87,9 @@ def print_unit(qty: int, special: bool) -> tuple[int, int]:
         sell, cost = 200, 100
     else:
         sell, cost = 300, 150
-
     if special:
         sell += 150
         cost += 100
-
     return sell, cost
 
 
@@ -176,7 +97,7 @@ def p(text, style):
     return Paragraph(str(text).replace("\n", "<br/>"), style)
 
 
-def safe_logo(width=28 * mm, height=28 * mm):
+def safe_logo(width=20 * mm, height=20 * mm):
     if not LOGO_FILE.exists():
         return None
     try:
@@ -187,203 +108,125 @@ def safe_logo(width=28 * mm, height=28 * mm):
         return None
 
 
-# =========================
-# PDF layout
-# =========================
-
-def make_pdf(
-    doc_type: str,
-    quote_no: str,
-    customer: str,
-    subject: str,
-    rows: list[dict],
-    subtotal: float,
-    tax: float,
-    total: float,
-    note: str,
-    show_bank: bool,
-):
+def make_pdf(doc_type: str, quote_no: str, customer: str, subject: str, rows: list[dict], subtotal: float, tax: float, total: float, note: str, show_bank: bool):
     buffer = io.BytesIO()
     pdfmetrics.registerFont(UnicodeCIDFont("HeiseiKakuGo-W5"))
 
-    doc = SimpleDocTemplate(
-        buffer,
-        pagesize=A4,
-        rightMargin=14 * mm,
-        leftMargin=14 * mm,
-        topMargin=12 * mm,
-        bottomMargin=12 * mm,
-    )
+    doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=14 * mm, leftMargin=14 * mm, topMargin=12 * mm, bottomMargin=12 * mm)
 
     base = ParagraphStyle("base", fontName="HeiseiKakuGo-W5", fontSize=9, leading=13)
     small = ParagraphStyle("small", fontName="HeiseiKakuGo-W5", fontSize=8, leading=11)
     title = ParagraphStyle("title", fontName="HeiseiKakuGo-W5", fontSize=24, leading=30, alignment=1)
-    right = ParagraphStyle("right", fontName="HeiseiKakuGo-W5", fontSize=8.2, leading=11, alignment=2)
     center = ParagraphStyle("center", fontName="HeiseiKakuGo-W5", fontSize=9, leading=12, alignment=1)
-    amount_num = ParagraphStyle("amount_num", fontName="HeiseiKakuGo-W5", fontSize=28, leading=34, alignment=1)
+    amount_num = ParagraphStyle("amount_num", fontName="HeiseiKakuGo-W5", fontSize=29, leading=34, alignment=1)
+    company_style = ParagraphStyle("company", fontName="HeiseiKakuGo-W5", fontSize=8.8, leading=12, alignment=0)
 
     dark = HexColor("#3A3A3A")
+    pale_blue = HexColor("#EAF6FB")
     light = HexColor("#F5F5F5")
     border = HexColor("#222222")
-    accent = HexColor("#EFEFEF")
+    amount_bg = HexColor("#F0F7FA")
+    grid = HexColor("#D9D9D9")
 
-    story = []
+    story = [Paragraph(doc_type, title), Spacer(1, 5)]
 
-    # Top header: logo left, title center, company info right
-    logo = safe_logo(width=30 * mm, height=30 * mm)
-    logo_cell = logo if logo else p(f"<b>{BRAND_NAME}</b>", base)
+    logo = safe_logo(width=20 * mm, height=20 * mm)
+    logo_cell = logo if logo else p("<b>LOGO</b>", small)
+
+    left_info = Table([[p(f"<font size='12'><b>{customer}</b></font>", base)], [p(f"<b>件名：</b>{subject}", base)]], colWidths=[86 * mm], rowHeights=[12 * mm, 10 * mm])
+    left_info.setStyle(TableStyle([
+        ("LINEBELOW", (0, 0), (0, 0), 0.7, border),
+        ("LINEBELOW", (0, 1), (0, 1), 0.7, border),
+        ("BACKGROUND", (0, 1), (0, 1), pale_blue),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 4),
+        ("TOPPADDING", (0, 0), (-1, -1), 4),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+    ]))
 
     company_info = p(
-        f"<b>{BRAND_NAME}</b><br/>"
+        f"<font size='11'><b>{BRAND_NAME}</b></font><br/>"
         f"{COMPANY_NAME}<br/>"
         f"Mail：{EMAIL}<br/>"
         f"法人番号：{CORPORATE_NO}<br/>"
-        f"番号：{quote_no}<br/>"
+        f"見積番号：{quote_no}<br/>"
         f"発行日：{date.today().strftime('%Y/%m/%d')}",
-        right,
+        company_style,
     )
+    company_block = Table([[logo_cell, company_info]], colWidths=[23 * mm, 65 * mm], rowHeights=[28 * mm])
+    company_block.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("ALIGN", (0, 0), (0, 0), "LEFT"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("TOPPADDING", (0, 0), (-1, -1), 1),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 1),
+    ]))
 
-    header = Table(
-        [[logo_cell, Paragraph(doc_type, title), company_info]],
-        colWidths=[44 * mm, 72 * mm, 62 * mm],
-        rowHeights=[32 * mm],
-    )
-    header.setStyle(
-        TableStyle(
-            [
-                ("VALIGN", (0, 0), (-1, -1), "TOP"),
-                ("ALIGN", (1, 0), (1, 0), "CENTER"),
-                ("ALIGN", (2, 0), (2, 0), "RIGHT"),
-            ]
-        )
-    )
-    story.append(header)
-    story.append(Spacer(1, 6))
+    header = Table([[left_info, company_block]], colWidths=[88 * mm, 90 * mm], rowHeights=[30 * mm])
+    header.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("ALIGN", (1, 0), (1, 0), "RIGHT"),
+        ("LINEBELOW", (0, 0), (-1, 0), 0.9, HexColor("#BFBFBF")),
+    ]))
+    story += [header, Spacer(1, 9)]
 
-    # Customer and subject band
-    customer_table = Table(
-        [
-            [p(f"<font size='12'><b>{customer}</b></font>", base)],
-            [p(f"<b>件名：</b>{subject}", base)],
-        ],
-        colWidths=[178 * mm],
-        rowHeights=[12 * mm, 10 * mm],
-    )
-    customer_table.setStyle(
-        TableStyle(
-            [
-                ("BOX", (0, 0), (-1, -1), 0.8, border),
-                ("BACKGROUND", (0, 1), (0, 1), light),
-                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-                ("LEFTPADDING", (0, 0), (-1, -1), 8),
-                ("RIGHTPADDING", (0, 0), (-1, -1), 8),
-            ]
-        )
-    )
-    story.append(customer_table)
-    story.append(Spacer(1, 10))
-
-    # Amount card: rounded corners
     amount_label = "御見積金額（税込）" if doc_type == "見積書" else "御請求金額（税込）"
-    amount_table = Table(
-        [[p(f"<b>{amount_label}</b>", center)], [Paragraph(yen(total), amount_num)]],
-        colWidths=[178 * mm],
-        rowHeights=[9 * mm, 17 * mm],
-    )
-    amount_table.setStyle(
-        TableStyle(
-            [
-                ("BOX", (0, 0), (-1, -1), 2.0, border),
-                ("ROUNDEDCORNERS", [8, 8, 8, 8]),
-                ("BACKGROUND", (0, 0), (-1, -1), accent),
-                ("ALIGN", (0, 0), (-1, -1), "CENTER"),
-                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-                ("TOPPADDING", (0, 0), (-1, -1), 4),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
-            ]
-        )
-    )
-    story.append(amount_table)
-    story.append(Spacer(1, 12))
+    amount_table = Table([[p(f"<b>{amount_label}</b>", center)], [Paragraph(yen(total), amount_num)]], colWidths=[178 * mm], rowHeights=[8 * mm, 16 * mm])
+    amount_table.setStyle(TableStyle([
+        ("BOX", (0, 0), (-1, -1), 2.0, border),
+        ("ROUNDEDCORNERS", [10, 10, 10, 10]),
+        ("BACKGROUND", (0, 0), (-1, -1), amount_bg),
+        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ("TOPPADDING", (0, 0), (-1, -1), 3),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+    ]))
+    story += [amount_table, Spacer(1, 10)]
 
-    # Detail table
     data = [["項目", "内容", "数量", "単価", "金額"]]
     for row in rows:
-        data.append(
-            [
-                row["item"],
-                p(row["desc"], small),
-                row["qty"],
-                yen(row["unit"]),
-                yen(row["amount"]),
-            ]
-        )
-    data += [
-        ["", "", "", "小計", yen(subtotal)],
-        ["", "", "", "消費税10%", yen(tax)],
-        ["", "", "", "合計", yen(total)],
-    ]
+        data.append([row["item"], p(row["desc"], small), row["qty"], yen(row["unit"]), yen(row["amount"])])
+    data += [["", "", "", "小計", yen(subtotal)], ["", "", "", "消費税10%", yen(tax)], ["", "", "", "合計", yen(total)]]
 
     detail = Table(data, colWidths=[31 * mm, 65 * mm, 27 * mm, 27 * mm, 28 * mm])
-    detail.setStyle(
-        TableStyle(
-            [
-                ("FONTNAME", (0, 0), (-1, -1), "HeiseiKakuGo-W5"),
-                ("GRID", (0, 0), (-1, -1), 0.35, HexColor("#D9D9D9")),
-                ("BACKGROUND", (0, 0), (-1, 0), dark),
-                ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
-                ("ALIGN", (2, 1), (-1, -1), "RIGHT"),
-                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-                ("TOPPADDING", (0, 0), (-1, -1), 6),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
-                ("BACKGROUND", (0, -3), (-1, -1), HexColor("#FAFAFA")),
-                ("FONTNAME", (3, -1), (-1, -1), "HeiseiKakuGo-W5"),
-            ]
-        )
-    )
-    story.append(detail)
-    story.append(Spacer(1, 10))
+    detail.setStyle(TableStyle([
+        ("FONTNAME", (0, 0), (-1, -1), "HeiseiKakuGo-W5"),
+        ("GRID", (0, 0), (-1, -1), 0.35, grid),
+        ("BACKGROUND", (0, 0), (-1, 0), dark),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        ("ALIGN", (2, 1), (-1, -1), "RIGHT"),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ("TOPPADDING", (0, 0), (-1, -1), 6),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+        ("BACKGROUND", (0, -3), (-1, -1), HexColor("#FAFAFA")),
+        ("FONTNAME", (3, -1), (-1, -1), "HeiseiKakuGo-W5"),
+    ]))
+    story += [detail, Spacer(1, 9)]
 
-    # Note area
-    note_table = Table(
-        [[p("<b>備考</b>", base)], [p(note if note else " ", small)]],
-        colWidths=[178 * mm],
-        rowHeights=[8 * mm, 22 * mm],
-    )
-    note_table.setStyle(
-        TableStyle(
-            [
-                ("BOX", (0, 0), (-1, -1), 0.6, HexColor("#CFCFCF")),
-                ("BACKGROUND", (0, 0), (0, 0), light),
-                ("VALIGN", (0, 0), (-1, -1), "TOP"),
-                ("LEFTPADDING", (0, 0), (-1, -1), 8),
-                ("RIGHTPADDING", (0, 0), (-1, -1), 8),
-                ("TOPPADDING", (0, 0), (-1, -1), 5),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
-            ]
-        )
-    )
+    note_table = Table([[p("<b>備考</b>", base)], [p(note if note else " ", small)]], colWidths=[178 * mm], rowHeights=[8 * mm, 22 * mm])
+    note_table.setStyle(TableStyle([
+        ("BOX", (0, 0), (-1, -1), 0.6, HexColor("#CFCFCF")),
+        ("BACKGROUND", (0, 0), (0, 0), light),
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 8),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+        ("TOPPADDING", (0, 0), (-1, -1), 5),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
+    ]))
     story.append(note_table)
 
     if show_bank:
-        bank_text = (
-            f"{BANK_INFO['bank']}<br/>"
-            f"{BANK_INFO['branch']}<br/>"
-            f"{BANK_INFO['type']} {BANK_INFO['number']}<br/>"
-            f"{BANK_INFO['name']}"
-        )
+        bank_text = f"{BANK_INFO['bank']}<br/>{BANK_INFO['branch']}<br/>{BANK_INFO['type']} {BANK_INFO['number']}<br/>{BANK_INFO['name']}"
         bank_table = Table([[p("<b>お振込先</b><br/>" + bank_text, small)]], colWidths=[178 * mm])
-        bank_table.setStyle(
-            TableStyle(
-                [
-                    ("BOX", (0, 0), (-1, -1), 0.6, HexColor("#CFCFCF")),
-                    ("LEFTPADDING", (0, 0), (-1, -1), 8),
-                    ("RIGHTPADDING", (0, 0), (-1, -1), 8),
-                    ("TOPPADDING", (0, 0), (-1, -1), 6),
-                    ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
-                ]
-            )
-        )
+        bank_table.setStyle(TableStyle([
+            ("BOX", (0, 0), (-1, -1), 0.6, HexColor("#CFCFCF")),
+            ("LEFTPADDING", (0, 0), (-1, -1), 8),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+            ("TOPPADDING", (0, 0), (-1, -1), 6),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+        ]))
         story += [Spacer(1, 8), bank_table]
 
     doc.build(story)
@@ -391,14 +234,9 @@ def make_pdf(
     return buffer
 
 
-# =========================
-# Master UI
-# =========================
-
 def master_ui():
     with st.expander("マスター管理"):
         tab_body, tab_customer, tab_data = st.tabs(["ボディ追加", "顧客追加", "データ確認"])
-
         with tab_body:
             c1, c2 = st.columns(2)
             with c1:
@@ -412,7 +250,6 @@ def master_ui():
                 cost_default = int(reference_price * 0.4) if auto_calc and reference_price else 0
                 sell = st.number_input("販売単価", 0, 99999, sell_default)
                 cost = st.number_input("原価", 0, 99999, cost_default)
-
             if st.button("ボディマスターに保存"):
                 if code and name and variant:
                     st.session_state.body_master.setdefault(code, {"name": name, "variants": {}})
@@ -422,7 +259,6 @@ def master_ui():
                     st.success("保存しました")
                 else:
                     st.warning("品番・商品名・区分を入力してください")
-
         with tab_customer:
             customer_key = st.text_input("顧客キー", "")
             customer_name = st.text_input("宛名表示", "")
@@ -430,16 +266,11 @@ def master_ui():
             customer_memo = st.text_area("メモ", "")
             if st.button("顧客マスターに保存"):
                 if customer_key and customer_name:
-                    st.session_state.customer_master[customer_key] = {
-                        "name": customer_name,
-                        "person": customer_person,
-                        "memo": customer_memo,
-                    }
+                    st.session_state.customer_master[customer_key] = {"name": customer_name, "person": customer_person, "memo": customer_memo}
                     save_json(CUSTOMER_MASTER_FILE, st.session_state.customer_master)
                     st.success("保存しました")
                 else:
                     st.warning("顧客キーと宛名表示を入力してください")
-
         with tab_data:
             st.write("ボディマスター")
             st.code(json.dumps(st.session_state.body_master, ensure_ascii=False, indent=2), language="json")
@@ -447,159 +278,63 @@ def master_ui():
             st.code(json.dumps(st.session_state.customer_master, ensure_ascii=False, indent=2), language="json")
 
 
-# =========================
-# Preview
-# =========================
-
 def preview_html(doc_type, quote_no, customer, subject, rows, subtotal, tax, total, note):
     amount_label = "御見積金額（税込）" if doc_type == "見積書" else "御請求金額（税込）"
-    tr = ""
+    detail_rows = ""
     for r in rows:
-        tr += (
-            f"<tr><td>{r['item']}</td><td>{r['desc'].replace(chr(10), ' / ')}</td>"
-            f"<td>{r['qty']}</td><td>{yen(r['unit'])}</td><td>{yen(r['amount'])}</td></tr>"
-        )
+        detail_rows += f"<tr><td>{r['item']}</td><td>{r['desc'].replace(chr(10), ' / ')}</td><td>{r['qty']}</td><td>{yen(r['unit'])}</td><td>{yen(r['amount'])}</td></tr>"
 
     return f"""
     <style>
-      .paper {{
-        background:#fff;
-        border:1px solid #ddd;
-        padding:18px;
-        box-shadow:0 2px 10px rgba(0,0,0,.08);
-        color:#111;
-      }}
-      .head {{
-        display:grid;
-        grid-template-columns: 1fr 1.2fr 1fr;
-        align-items:start;
-        gap:10px;
-      }}
-      .title {{
-        text-align:center;
-        font-size:26px;
-        font-weight:800;
-      }}
-      .company {{
-        text-align:right;
-        font-size:12px;
-        line-height:1.45;
-      }}
-      .customer {{
-        border:1px solid #222;
-        margin-top:14px;
-      }}
-      .customer div {{
-        padding:8px 10px;
-      }}
-      .subject {{
-        background:#f5f5f5;
-        border-top:1px solid #222;
-      }}
-      .amount {{
-        margin:16px 0;
-        border:2px solid #222;
-        border-radius:14px;
-        background:#efefef;
-        text-align:center;
-        padding:10px;
-      }}
-      .amount .label {{
-        font-weight:700;
-      }}
-      .amount .price {{
-        font-size:34px;
-        font-weight:900;
-      }}
-      table.preview {{
-        width:100%;
-        border-collapse:collapse;
-        font-size:12px;
-      }}
-      table.preview th {{
-        background:#3a3a3a;
-        color:white;
-      }}
-      table.preview th, table.preview td {{
-        border:1px solid #ddd;
-        padding:7px;
-      }}
-      table.preview td:nth-child(3), table.preview td:nth-child(4), table.preview td:nth-child(5) {{
-        text-align:right;
-      }}
-      .note {{
-        margin-top:12px;
-        border:1px solid #ccc;
-      }}
-      .note-title {{
-        background:#f5f5f5;
-        padding:7px;
-        font-weight:700;
-      }}
-      .note-body {{
-        padding:8px;
-        min-height:45px;
-      }}
+      .paper {{ background:#fff; border:1px solid #ddd; padding:18px; box-shadow:0 2px 10px rgba(0,0,0,.08); color:#111; }}
+      .title {{ text-align:center; font-size:26px; font-weight:800; margin-bottom:10px; }}
+      .toprow {{ display:grid; grid-template-columns: 1fr 1fr; gap:18px; border-bottom:1px solid #bfbfbf; padding-bottom:10px; }}
+      .client-lines {{ font-size:13px; line-height:1.6; }}
+      .client-name {{ border-bottom:1px solid #222; padding:6px 0; font-weight:700; }}
+      .subject-line {{ background:#eaf6fb; border-bottom:1px solid #222; padding:6px 0; }}
+      .companybox {{ display:flex; justify-content:flex-end; align-items:flex-start; gap:10px; }}
+      .logo {{ width:58px; min-width:58px; height:58px; display:flex; align-items:flex-start; justify-content:center; font-size:11px; }}
+      .company {{ text-align:left; font-size:12px; line-height:1.45; }}
+      .amount {{ margin:14px 0; border:2px solid #222; border-radius:14px; background:#f0f7fa; text-align:center; padding:8px; }}
+      .amount .label {{ font-weight:700; }}
+      .amount .price {{ font-size:34px; font-weight:900; }}
+      table.preview {{ width:100%; border-collapse:collapse; font-size:12px; }}
+      table.preview th {{ background:#3a3a3a; color:white; }}
+      table.preview th, table.preview td {{ border:1px solid #ddd; padding:7px; }}
+      table.preview td:nth-child(3), table.preview td:nth-child(4), table.preview td:nth-child(5) {{ text-align:right; }}
+      .note {{ margin-top:12px; border:1px solid #ccc; }}
+      .note-title {{ background:#f5f5f5; padding:7px; font-weight:700; }}
+      .note-body {{ padding:8px; min-height:45px; }}
     </style>
     <div class="paper">
-      <div class="head">
-        <div><b>{BRAND_NAME}</b></div>
-        <div class="title">{doc_type}</div>
-        <div class="company">
-          <b>{BRAND_NAME}</b><br>
-          {COMPANY_NAME}<br>
-          Mail：{EMAIL}<br>
-          法人番号：{CORPORATE_NO}<br>
-          番号：{quote_no}<br>
-          発行日：{date.today().strftime('%Y/%m/%d')}
+      <div class="title">{doc_type}</div>
+      <div class="toprow">
+        <div class="client-lines">
+          <div class="client-name">{customer}</div>
+          <div class="subject-line"><b>件名：</b>{subject}</div>
+        </div>
+        <div class="companybox">
+          <div class="logo">LOGO</div>
+          <div class="company"><b>{BRAND_NAME}</b><br>{COMPANY_NAME}<br>Mail：{EMAIL}<br>法人番号：{CORPORATE_NO}<br>見積番号：{quote_no}<br>発行日：{date.today().strftime('%Y/%m/%d')}</div>
         </div>
       </div>
-
-      <div class="customer">
-        <div><b>{customer}</b></div>
-        <div class="subject"><b>件名：</b>{subject}</div>
-      </div>
-
-      <div class="amount">
-        <div class="label">{amount_label}</div>
-        <div class="price">{yen(total)}</div>
-      </div>
-
-      <table class="preview">
-        <tr><th>項目</th><th>内容</th><th>数量</th><th>単価</th><th>金額</th></tr>
-        {tr}
-        <tr><td colspan="4">小計</td><td>{yen(subtotal)}</td></tr>
-        <tr><td colspan="4">消費税10%</td><td>{yen(tax)}</td></tr>
-        <tr><td colspan="4"><b>合計</b></td><td><b>{yen(total)}</b></td></tr>
-      </table>
-
-      <div class="note">
-        <div class="note-title">備考</div>
-        <div class="note-body">{note.replace(chr(10), '<br>')}</div>
-      </div>
+      <div class="amount"><div class="label">{amount_label}</div><div class="price">{yen(total)}</div></div>
+      <table class="preview"><tr><th>項目</th><th>内容</th><th>数量</th><th>単価</th><th>金額</th></tr>{detail_rows}<tr><td colspan="4">小計</td><td>{yen(subtotal)}</td></tr><tr><td colspan="4">消費税10%</td><td>{yen(tax)}</td></tr><tr><td colspan="4"><b>合計</b></td><td><b>{yen(total)}</b></td></tr></table>
+      <div class="note"><div class="note-title">備考</div><div class="note-body">{note.replace(chr(10), '<br>')}</div></div>
     </div>
     """
 
 
-# =========================
-# Main app
-# =========================
-
 def app():
     init_state()
-
-    st.title("HADAOJI PRINT 見積・請求アプリ v7")
-    st.caption("ロゴ対応 / 法人番号表示 / 合計金額角丸 / 濃グレー明細 / 顧客・ボディマスター")
-
+    st.title("HADAOJI PRINT 見積・請求アプリ v8.1")
+    st.caption("正式レイアウト / 宛名枠なし / ロゴ＋会社情報横並び / 金額角丸")
     master_ui()
-
     left, right = st.columns([1, 1.05])
-
     with left:
         st.subheader("基本情報")
         doc_type = st.selectbox("書類種類", ["見積書", "請求書"])
         quote_no = st.text_input("番号", quote_no_default())
-
         customer_mode = st.radio("宛名入力", ["顧客マスター", "自由入力"], horizontal=True)
         if customer_mode == "顧客マスター":
             customer_key = st.selectbox("顧客", list(st.session_state.customer_master.keys()))
@@ -610,10 +345,8 @@ def app():
                 st.caption(st.session_state.customer_master[customer_key].get("memo", ""))
         else:
             customer = st.text_input("宛名", "〇〇 様")
-
         subject = st.text_input("件名", "オリジナルウェア制作")
         show_bank = st.checkbox("振込先を表示", value=(doc_type == "請求書"))
-
         st.subheader("ボディ明細")
         c1, c2 = st.columns(2)
         if c1.button("＋ ボディ項目を増やす"):
@@ -622,20 +355,14 @@ def app():
         if c2.button("− 1行減らす") and st.session_state.body_count > 1:
             st.session_state.body_count -= 1
             st.rerun()
-
         body_rows = []
         for idx in range(st.session_state.body_count):
             with st.container(border=True):
                 st.markdown(f"**ボディ {idx + 1}**")
                 mode = st.selectbox("入力方法", ["マスターから選択", "自由入力"], key=f"mode_{idx}")
-
                 if mode == "マスターから選択":
                     code = st.selectbox("品番", list(st.session_state.body_master.keys()), key=f"code_{idx}")
-                    variant = st.selectbox(
-                        "区分",
-                        list(st.session_state.body_master[code]["variants"].keys()),
-                        key=f"variant_{idx}",
-                    )
+                    variant = st.selectbox("区分", list(st.session_state.body_master[code]["variants"].keys()), key=f"variant_{idx}")
                     item_name = f"{code}\n{st.session_state.body_master[code]['name']} / {variant}"
                     default_sell = st.session_state.body_master[code]["variants"][variant]["sell"]
                     default_cost = st.session_state.body_master[code]["variants"][variant]["cost"]
@@ -646,10 +373,8 @@ def app():
                     item_name = st.text_input("品番・商品名・色・サイズ", "未登録ボディ", key=f"free_name_{idx}")
                     sell = st.number_input("販売単価", 0, 99999, 0, key=f"free_sell_{idx}")
                     cost = st.number_input("原価", 0, 99999, 0, key=f"free_cost_{idx}")
-
                 qty = st.number_input("枚数", 1, 9999, 10, key=f"qty_{idx}")
                 body_rows.append({"name": item_name, "qty": qty, "sell": sell, "cost": cost})
-
         st.subheader("プリント")
         print_spots = st.number_input("プリント箇所数", 0, 10, 1)
         plate_count = st.number_input("製版数", 0, 10, 1)
@@ -658,7 +383,6 @@ def app():
 
     qty_total = sum(row["qty"] for row in body_rows)
     ps, pc = print_unit(qty_total, special)
-
     rows = []
     body_total = 0
     body_cost_total = 0
@@ -666,42 +390,15 @@ def app():
         amount = body["sell"] * body["qty"]
         body_total += amount
         body_cost_total += body["cost"] * body["qty"]
-        rows.append(
-            {
-                "item": "ボディ",
-                "desc": body["name"],
-                "qty": f"{body['qty']}枚",
-                "unit": body["sell"],
-                "amount": amount,
-            }
-        )
-
+        rows.append({"item": "ボディ", "desc": body["name"], "qty": f"{body['qty']}枚", "unit": body["sell"], "amount": amount})
     print_total = ps * qty_total * print_spots
     print_cost_total = pc * qty_total * print_spots
     plate_total = 8000 * plate_count
     plate_cost_total = 5500 * plate_count
-
     if print_spots:
-        rows.append(
-            {
-                "item": "プリント代",
-                "desc": f"{print_spots}箇所" + (" / 特色" if special else ""),
-                "qty": f"{qty_total}枚",
-                "unit": ps * print_spots,
-                "amount": print_total,
-            }
-        )
-
+        rows.append({"item": "プリント代", "desc": f"{print_spots}箇所" + (" / 特色" if special else ""), "qty": f"{qty_total}枚", "unit": ps * print_spots, "amount": print_total})
     if plate_count:
-        rows.append(
-            {
-                "item": "製版代",
-                "desc": "シルクスクリーン製版",
-                "qty": f"{plate_count}版",
-                "unit": 8000,
-                "amount": plate_total,
-            }
-        )
+        rows.append({"item": "製版代", "desc": "シルクスクリーン製版", "qty": f"{plate_count}版", "unit": 8000, "amount": plate_total})
 
     subtotal = body_total + print_total + plate_total
     tax = subtotal * 0.1
@@ -712,22 +409,10 @@ def app():
 
     with right:
         st.subheader("プレビュー")
-        st.markdown(
-            preview_html(doc_type, quote_no, customer, subject, rows, subtotal, tax, total, note),
-            unsafe_allow_html=True,
-        )
-        st.success(
-            f"管理用：総枚数 {qty_total}枚 / 原価 {yen(cost_total)} / 利益 {yen(profit)} / 利益率 {profit_rate:.1f}%"
-        )
-
+        st.markdown(preview_html(doc_type, quote_no, customer, subject, rows, subtotal, tax, total, note), unsafe_allow_html=True)
+        st.success(f"管理用：総枚数 {qty_total}枚 / 原価 {yen(cost_total)} / 利益 {yen(profit)} / 利益率 {profit_rate:.1f}%")
         pdf = make_pdf(doc_type, quote_no, customer, subject, rows, subtotal, tax, total, note, show_bank)
-        st.download_button(
-            "正式PDFをダウンロード",
-            data=pdf,
-            file_name=f"{quote_no}_{doc_type}.pdf",
-            mime="application/pdf",
-            type="primary",
-        )
+        st.download_button("正式PDFをダウンロード", data=pdf, file_name=f"{quote_no}_{doc_type}.pdf", mime="application/pdf", type="primary")
 
 
 app()
